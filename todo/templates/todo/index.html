@@ -1,0 +1,10 @@
+{% if all_todos %}
+    <h1>List of todos available</h1>
+    <ul>
+    {% for todo in all_todos %}
+        <li><a href="{% url 'todo' todo.id %}">{{ todo.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No todos are available.</p>
+{% endif %}

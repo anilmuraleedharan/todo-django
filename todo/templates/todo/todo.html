@@ -1,0 +1,18 @@
+{% if todo %}
+    <div>
+        <h1>Title: {{ todo.title }}</h1>
+        <h3>Created at: {{ todo.created_at }}</h3>
+        <h2>Tasks</h2>
+            {% if tasks %}
+                <ul>
+                {% for task in tasks %}
+                    <li><a href="{% url 'task' todo.id task.id %}">{{ task.description }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No tasks added for todo {{ todo.title }}.</p>
+            {% endif %}
+    </div>
+{% else %}
+    <p>No matching todo available.</p>
+{% endif %}

@@ -1,0 +1,10 @@
+fileignoreconfig:
+- filename: Pipfile.lock
+  checksum: a871f7284df97c6c1203f9480603b14903bf3770614ccd0e42e74aef6d0ea3f4
+- filename: myproject/settings.py
+  checksum: 0b2059386fce915a48cee5e1d069e4beae2828392d7a0e8e90723af929fcb41b
+- filename: todo/models.py
+  checksum: 6604a1a27bf27b5d8aaa4daeeb6e46a67cc4cc3f6d6d9163f5afe761bfe1059f
+- filename: todo/migrations/0001_initial.py
+  checksum: 71ae89ec6a2a081d90561f15f32eaa402bb4a02f43a34e9ab3765358f6dedf8e
+version: ""
