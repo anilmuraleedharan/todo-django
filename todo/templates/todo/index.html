@@ -1,10 +1,16 @@
 {% if all_todos %}
     <h1>List of todos available</h1>
     <ul>
-    {% for todo in all_todos %}
-        <li><a href="{% url 'todo' todo.id %}">{{ todo.title }}</a></li>
-    {% endfor %}
+        {% for todo in all_todos %}
+            <li><a href="{% url 'todo' todo.id %}">{{ todo.title }}</a></li>
+        {% endfor %}
     </ul>
+    <h2>Create a new todo</h2>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save">
+    </form>
 {% else %}
     <p>No todos are available.</p>
 {% endif %}

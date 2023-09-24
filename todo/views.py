@@ -1,12 +1,22 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 
+from todo.forms import TodoForm
 from todo.models import Todo, Task
 
 
 def index(request):
-    all_todos = Todo.objects.order_by("-id")
-    context = {"all_todos": all_todos}
-    return render(request, "todo/index.html", context)
+    if request.method == "GET":
+        all_todos = Todo.objects.order_by("-id")
+        form = TodoForm()
+        context = {"all_todos": all_todos, "form": form}
+        return render(request, "todo/index.html", context)
+    if request.method == "POST":
+        form = TodoForm(request.POST)
+        if form.is_valid():
+            new_todo = form.save()
+            todo_detail_url = reverse("todo", kwargs={"todo_id": new_todo.id})
+            return redirect(todo_detail_url)
 
 
 def todo(request, todo_id):
