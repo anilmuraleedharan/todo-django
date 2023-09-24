@@ -16,7 +16,7 @@ class TaskForm(ModelForm):
         fields = ['todo_id', 'description', 'status']
         widgets = {
             'todo_id': HiddenInput(),
-            'status': Select(attrs={'class': 'form-control'}),
+            'status': HiddenInput(),
             'description': Input()
         }
 
@@ -25,4 +25,4 @@ class TaskForm(ModelForm):
         super().__init__(*args, **kwargs)
         if todo_id is not None:
             self.fields['todo_id'].initial = todo_id
-        self.fields['status'].initial = 'pending'  # Set the default status to 'Pending'
+        self.fields['status'].initial = False  # Set the default status to 'False'
