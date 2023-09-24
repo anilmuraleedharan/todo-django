@@ -1,9 +1,18 @@
-{% if task %}
-    <div>
-        <h1>Description: {{ task.description }}</h1>
-        <h3>Created at: {{ task.created_at }}</h3>
-        <h3>Status: {{ task.status }}</h3>
-    </div>
-{% else %}
-    <p>No matching task available.</p>
-{% endif %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Todo App</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        {% if task %}
+            <div>
+                <h1>Description: {{ task.description }}</h1>
+                <h3>Created at: {{ task.created_at }}</h3>
+                <h3>Status: {{ task.status }}</h3>
+            </div>
+        {% else %}
+            <p>No matching task available.</p>
+        {% endif %}
+    </body>
+</html>
