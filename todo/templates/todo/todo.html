@@ -1,14 +1,41 @@
 {% if todo %}
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 70%;
+      margin: 30px 0;
+    }
+
+    td, th {
+      border: 1px solid #aaaaaa;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #eeeeee;
+    }
+    </style>
     <div>
         <h1>Title: {{ todo.title }}</h1>
         <h3>Created at: {{ todo.created_at }}</h3>
         <h2>Tasks</h2>
             {% if tasks %}
-                <ul>
-                {% for task in tasks %}
-                    <li><a href="{% url 'task' todo.id task.id %}">{{ task.description }}</a></li>
-                {% endfor %}
-                </ul>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for task in tasks %}
+                        <tr>
+                            <td><a href="{% url 'task' todo.id task.id %}">{{ task.id }}</a></td>
+                            <td>{{ task.description }}</td>
+                            <td>{{ task.status }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             {% else %}
                 <p>No tasks added for todo {{ todo.title }}.</p>
             {% endif %}

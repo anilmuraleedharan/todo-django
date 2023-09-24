@@ -12,6 +12,7 @@ def index(request):
         form = TodoForm()
         context = {"all_todos": all_todos, "form": form}
         return render(request, "todo/index.html", context)
+
     if request.method == "POST":
         form = TodoForm(request.POST)
         if form.is_valid():
@@ -32,7 +33,7 @@ def todo(request, todo_id):
         form.fields['todo_id'].value = todo.id
         return render(request, "todo/todo.html", {"todo": todo, "tasks": tasks, "form": form})
 
-    elif request.method == "POST":
+    if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
