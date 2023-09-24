@@ -1,7 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from todo.forms import TodoForm
+from todo.forms import TodoForm, TaskForm
 from todo.models import Todo, Task
 
 
@@ -18,11 +19,32 @@ def index(request):
             todo_detail_url = reverse("todo", kwargs={"todo_id": new_todo.id})
             return redirect(todo_detail_url)
 
+    # Handle other HTTP methods (e.g., PUT, DELETE)
+    return HttpResponse(status=405)  # Method not allowed for other HTTP methods
+
 
 def todo(request, todo_id):
     todo = get_object_or_404(Todo, pk=todo_id)
-    tasks = Task.objects.filter(todo_id=todo.id).order_by("-id")
-    return render(request, "todo/todo.html", {"todo": todo, "tasks": tasks})
+    print(todo)
+
+    if request.method == "GET":
+        tasks = Task.objects.filter(todo_id=todo.id).order_by("-id")
+        form = TaskForm(initial={'todo_id': todo.id})
+        form.fields['todo_id'].value = todo.id
+        return render(request, "todo/todo.html", {"todo": todo, "tasks": tasks, "form": form})
+
+    elif request.method == "POST":
+        form = TaskForm(request.POST)
+
+        print("form", form)
+        if form.is_valid():
+            print("valid form")
+            form.save()
+            print("saved")
+            return redirect("todo", todo_id=todo.id)
+
+    # Handle other HTTP methods (e.g., PUT, DELETE)
+    return HttpResponse(status=405)  # Method not allowed for other HTTP methods
 
 
 def task(request, todo_id, task_id):

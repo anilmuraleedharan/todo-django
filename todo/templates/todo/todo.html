@@ -12,6 +12,11 @@
             {% else %}
                 <p>No tasks added for todo {{ todo.title }}.</p>
             {% endif %}
+        <form method="post" action="{% url 'todo' todo_id=todo.id %}">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Save">
+        </form>
     </div>
 {% else %}
     <p>No matching todo available.</p>
