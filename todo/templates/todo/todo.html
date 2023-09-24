@@ -113,5 +113,7 @@
         {% else %}
             <p>No matching todo available.</p>
         {% endif %}
+        <br>
+        <a href="{% url 'index' %}">{{ "<< Back to main page" }}</a>
     </body>
 </html>
