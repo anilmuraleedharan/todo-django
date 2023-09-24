@@ -17,24 +17,78 @@
       background-color: #eeeeee;
     }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const handleTaskStatusChange = (checkbox) => {
+            if (checkbox.checked) {
+                checkbox.disabled = true;
+                const taskId = checkbox.getAttribute('data-task-id');
+                const todoId = checkbox.getAttribute('data-todo-id');
+                const csrfToken = getCookie('csrftoken'); // Function to get the CSRF token from cookies
+                $.ajax({
+                    url: `/todo/${todoId}/task/${taskId}`,
+                    type: 'PATCH',
+                    headers: {
+                        'X-CSRFToken': csrfToken, // Include the CSRF token in the request headers
+                    },
+                    success: function (data) {
+                        if (!data.success) {
+                            // Handle error messages or other actions if needed
+                            console.log(data.message);
+                        }
+                    },
+                    error: function () {
+                        console.error('An error occurred while updating task status.');
+                    }
+                });
+            }
+        }
+
+        // Function to retrieve the CSRF token from cookies
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Check if this cookie name matches the one for the CSRF token
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
     <div>
         <h1>Title: {{ todo.title }}</h1>
         <h3>Created at: {{ todo.created_at }}</h3>
         <h2>Tasks</h2>
             {% if tasks %}
                 <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                    </tr>
-                    {% for task in tasks %}
+                    <thead>
                         <tr>
-                            <td><a href="{% url 'task' todo.id task.id %}">{{ task.id }}</a></td>
-                            <td>{{ task.description }}</td>
-                            <td>{{ task.status }}</td>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Status</th>
                         </tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <td><a href="{% url 'task' todo.id task.id %}">{{ task.id }}</a></td>
+                                <td>{{ task.description }}</td>
+                                <td>
+                                    {% if task.status %}
+                                        <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)" checked disabled>
+                                    {% else %}
+                                        <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)">
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             {% else %}
                 <p>No tasks added for todo {{ todo.title }}.</p>

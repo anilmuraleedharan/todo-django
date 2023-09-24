@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import json
+
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
@@ -45,4 +47,9 @@ def todo(request, todo_id):
 
 def task(request, todo_id, task_id):
     task = get_object_or_404(Task, pk=task_id, todo_id=todo_id)
-    return render(request, "todo/task.html", {"task": task})
+    if request.method == "GET":
+        return render(request, "todo/task.html", {"task": task})
+    if request.method == "PATCH":
+        task.status = True
+        task.save()
+        return JsonResponse({"message": "Task status updated successfully."})
