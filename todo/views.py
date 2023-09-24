@@ -10,7 +10,7 @@ from todo.models import Todo, Task
 
 def index(request):
     if request.method == "GET":
-        all_todos = Todo.objects.order_by("-id")
+        all_todos = Todo.objects.order_by("id")
         form = TodoForm()
         context = {"all_todos": all_todos, "form": form}
         return render(request, "todo/index.html", context)
@@ -30,7 +30,7 @@ def todo(request, todo_id):
     todo = get_object_or_404(Todo, pk=todo_id)
 
     if request.method == "GET":
-        tasks = Task.objects.filter(todo_id=todo.id).order_by("-id")
+        tasks = Task.objects.filter(todo_id=todo.id).order_by("id")
         form = TaskForm(initial={'todo_id': todo.id})
         form.fields['todo_id'].value = todo.id
         return render(request, "todo/todo.html", {"todo": todo, "tasks": tasks, "form": form})
@@ -53,3 +53,6 @@ def task(request, todo_id, task_id):
         task.status = True
         task.save()
         return JsonResponse({"message": "Task status updated successfully."})
+
+    # Handle other HTTP methods (e.g., PUT, DELETE)
+    return HttpResponse(status=405)  # Method not allowed for other HTTP methods
