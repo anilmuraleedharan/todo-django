@@ -71,34 +71,35 @@
                 <h1>Title: {{ todo.title }}</h1>
                 <h3>Created at: {{ todo.created_at }}</h3>
                 <h2>Tasks</h2>
-                    {% if tasks %}
-                        <table>
-                            <thead>
+                {% if tasks %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
+                                    <td><a href="{% url 'task' todo.id task.id %}">{{ task.id }}</a></td>
+                                    <td>{{ task.description }}</td>
+                                    <td>
+                                        {% if task.status %}
+                                            <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)" checked disabled>
+                                        {% else %}
+                                            <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)">
+                                        {% endif %}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for task in tasks %}
-                                    <tr>
-                                        <td><a href="{% url 'task' todo.id task.id %}">{{ task.id }}</a></td>
-                                        <td>{{ task.description }}</td>
-                                        <td>
-                                            {% if task.status %}
-                                                <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)" checked disabled>
-                                            {% else %}
-                                                <input type="checkbox" class="task-status" data-task-id="{{ task.id }}" data-todo-id="{{ todo.id }}" onchange="handleTaskStatusChange(this)">
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p>No tasks added for todo {{ todo.title }}.</p>
-                    {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No tasks added for todo {{ todo.title }}.</p>
+                {% endif %}
+                <h2>Create a new task</h2>
                 <form method="post" action="{% url 'todo' todo_id=todo.id %}">
                     {% csrf_token %}
                     {{ form }}
