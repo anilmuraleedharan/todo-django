@@ -25,7 +25,6 @@ def index(request):
 
 def todo(request, todo_id):
     todo = get_object_or_404(Todo, pk=todo_id)
-    print(todo)
 
     if request.method == "GET":
         tasks = Task.objects.filter(todo_id=todo.id).order_by("-id")
@@ -35,12 +34,8 @@ def todo(request, todo_id):
 
     elif request.method == "POST":
         form = TaskForm(request.POST)
-
-        print("form", form)
         if form.is_valid():
-            print("valid form")
             form.save()
-            print("saved")
             return redirect("todo", todo_id=todo.id)
 
     # Handle other HTTP methods (e.g., PUT, DELETE)
